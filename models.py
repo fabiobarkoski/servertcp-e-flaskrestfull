@@ -2,14 +2,16 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-#conectando ao banco de dados
+# conectando ao banco de dados
 engine = create_engine('sqlite:///users.db', convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False, bind=engine))
 
 Base = declarative_base()
 Base.query = db_session.query_property()
 
-#criando tabela de usuários
+# criando tabela de usuários
+
+
 class Users(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
@@ -21,9 +23,11 @@ class Users(Base):
 
     def commit(self):
         db_session.add(self)
-        db_session.commit()    
+        db_session.commit()
 
-#criando tabela de produtos
+# criando tabela de produtos
+
+
 class Product(Base):
     __tablename__ = 'product'
     id = Column(Integer, primary_key=True)
@@ -32,17 +36,20 @@ class Product(Base):
     amount = Column(Integer)
 
     def __repr__(self):
-        return f'Produto: {self.name} Tipo: {self.type} Quantidade: {self.amount}'
+        return f'Produto:{self.name} Tipo:{self.type} Quantidade:{self.amount}'
 
     def commit(self):
         db_session.add(self)
         db_session.commit()
 
-print('criado com sucesso a segunda tabela')
+    def delete(self):
+        db_session.delete(self)
+        db_session.commit()
+
 
 def init_db():
     Base.metadata.create_all(bind=engine)
 
+
 if __name__ == '__main__':
     init_db()
-            
