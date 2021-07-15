@@ -15,15 +15,19 @@ s.bind((HOST, PORT))
 s.listen()
 conn, addr = s.accept()
 print('Conectado por: ', addr)
-# loopíng de receber dados, checar, consultar banco de dados e enviar
+# loopíng de receber dados, checar,
+# consultar banco de dados e enviar informações
 while True:
     data = conn.recv(1024)
     if not data:
         break
+# decodificação dos dados JSON recebidos
     datad = data.decode()
+# conversão de JSON para python
     dataJson = json.loads(datad)
     print(f'{dataJson} enviado de:  + {addr}')
     message = None
+# inicio da checagem de usuario que está realizando consulta
     userAll = Users.query.all()
     for user in userAll:
         h = hashlib.sha1()
@@ -32,8 +36,10 @@ while True:
         h.update(userAuth.encode())
         print('COMPARANDO {} COM {}'.format(dataJson['hash'], h.hexdigest()))
         hcomp = h.hexdigest()
+# comparando hash do banco de dados com a recebida pela API
         if dataJson['hash'] == hcomp:
             print('VERIFICA')
+# inicio das consultas do servidor ao banco de dados e retorno para API
             if dataJson['to'] == 'products':
                 if dataJson['method'] == 'GET':
                     product = Product.query.all()

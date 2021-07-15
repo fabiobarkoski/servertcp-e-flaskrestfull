@@ -13,14 +13,19 @@ Base.query = db_session.query_property()
 
 
 class Users(Base):
+    """
+    Classe da Tabela Users
+    """
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(50), index=True, unique=True)
     password = Column(String(50))
 
+# função para exibir usuário e senha
     def __repr__(self):
         return f'Usuário: {self.username} Senha: {self.password}'
 
+# função para salvar as alterações no banco de dados
     def commit(self):
         db_session.add(self)
         db_session.commit()
@@ -29,6 +34,9 @@ class Users(Base):
 
 
 class Product(Base):
+    """
+    Classe da Tabela Product
+    """
     __tablename__ = 'product'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), index=True)
@@ -41,6 +49,7 @@ class Product(Base):
     def commit(self):
         db_session.add(self)
         db_session.commit()
+# função para deletar o produto selecionado
 
     def delete(self):
         db_session.delete(self)

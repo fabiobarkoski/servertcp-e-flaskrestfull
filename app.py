@@ -17,6 +17,10 @@ print('Conectado ao server!\n ------------------------------')
 
 
 class products(Resource):
+    """
+    Classe da rota produtos da qual exibi todos e cadastra novos
+    """
+
     def get(self, hash):
         # enviando consulta
         message = json.dumps({'method': 'GET',
@@ -29,6 +33,7 @@ class products(Resource):
 
     def post(self, hash):
         dataSend = request.json
+# conversão de dicionario para JSON
         message = json.dumps({'method': 'POST',
                               'hash': hash,
                               'to': 'products',
@@ -37,10 +42,16 @@ class products(Resource):
                               'amount': dataSend['amount']})
         s.sendall(message.encode())
         data = s.recv(1024)
+# conversão de JSON para python
         return json.loads(data.decode())
 
 
 class product(Resource):
+    """
+    Classe da rota produto da qual altera
+    os dados e exclui um produto em especifico
+    """
+
     def put(self, hash, id):
         dataSend = request.json
         message = json.dumps({'method': 'PUT',
@@ -60,19 +71,21 @@ class product(Resource):
                               'to': 'products',
                               'id': id})
         s.sendall(message.encode())
-        # recebendo resposta
         data = s.recv(1024)
         return json.loads(data.decode())
 
 
 class user(Resource):
+    """
+    Classe da rota usuário na qual exibe as informações
+    do usuário que esta consultando e os altera
+    """
+
     def get(self, hash):
-        # enviando consulta
         message = json.dumps({'method': 'GET',
                               'hash': hash,
                               'to': 'users'})
         s.sendall(message.encode())
-        # recebendo resposta
         data = s.recv(1024)
         return json.loads(data.decode())
 
@@ -83,15 +96,15 @@ class user(Resource):
                               'to': 'users',
                               'password': dataSend['password']})
         s.sendall(message.encode())
-        # recebendo resposta
         data = s.recv(1024)
         return json.loads(data.decode())
 
 
-# consulta todos os produtos e cadastra novos
+# consulta todos os produtos e cadastra novos, métodos GET e POST
 api.add_resource(products, '/<string:hash>/products/')
+# altera e exclui produto do banco de dados, métodos PUT e DELETE
 api.add_resource(product, '/<string:hash>/product/<int:id>/')
-# consulta os dados pessoais do usuário
+# consulta os dados pessoais do usuário e os altera, método GET e POST
 api.add_resource(user, '/<string:hash>/')
 
 if __name__ == '__main__':
