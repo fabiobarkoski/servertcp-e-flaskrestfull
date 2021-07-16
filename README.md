@@ -56,11 +56,11 @@ python app.py ou python3 app.py
 
 As rotas da API são as seguintes
 
--/<hash do usuario>/products/
+- /'<hash do usuario>'/products/
   Realiza a consulta e retorna todos os produtos, bem como cadastra novos
   
--/<hash do usuario>/product/<id do produto>/
+- /'<hash do usuario>'/product/<id do produto>/
   Altera os dados do produto ou exclui ele
   
--/<hash do usuario>/ 
+- /'<hash do usuario>'/ 
   Consulta os dados pessoais do usuário e altera a senha do mesmo
